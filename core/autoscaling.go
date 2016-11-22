@@ -710,10 +710,6 @@ func (a *autoScalingGroup) getCompatibleSpotInstanceTypes(
 
 	existing := refInstance.typeInfo
 
-	var vCPU int
-
-	AustinCPU := (existing.vCPU + 1)
-
 	debug.Println("Using this data as reference", existing)
 
 	debug.Println("Instance Data", spew.Sdump(a.region.instanceTypeInformation))
@@ -752,17 +748,16 @@ func (a *autoScalingGroup) getCompatibleSpotInstanceTypes(
 			continue
 		}
 
-		if candidate.vCPU >= AustinCPU {
-			logger.Println("CPU compatible, continuing evaluation")
-		} else {
-			logger.Println("Insuficient CPU cores, skipping", candidate.instanceType)
-			continue
-		}
-
-		if candidate.memory >= existing.memory {
-			logger.Println("memory compatible, continuing evaluation")
-		} else {
-			logger.Println("memory incompatible, skipping", candidate.instanceType)
+		if candidate.instanceType == "m4.16xlarge" {
+			logger.Println("This is a m4.16xlarge, continuing evaluation")
+		} else if candidate.instanceType == "m4.10xlarge" { 
+			logger.Println("This is a m4.10xlarge, continuing evaluation")
+    	} else if candidate.instanceType == "c4.8xlarge" { 
+            logger.Println("This is a c4.8xlarge, continuing evaluation")
+        } else if candidate.instanceType == "cc2.8xlarge" { 
+            logger.Println("This is a cc2.8xlarge, continuing evaluation")
+        } else {
+			logger.Println("Not a m4.16xlarge, m4.10xlarge, c4.8xlarge, cc2.8xlarge, skipping", candidate.instanceType)
 			continue
 		}
 
