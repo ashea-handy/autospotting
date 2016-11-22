@@ -709,6 +709,11 @@ func (a *autoScalingGroup) getCompatibleSpotInstanceTypes(
 	var filteredInstanceTypes []string
 
 	existing := refInstance.typeInfo
+
+	var vCPU int
+
+	AustinCPU := (existing.vCPU + 1)
+
 	debug.Println("Using this data as reference", existing)
 
 	debug.Println("Instance Data", spew.Sdump(a.region.instanceTypeInformation))
@@ -747,7 +752,7 @@ func (a *autoScalingGroup) getCompatibleSpotInstanceTypes(
 			continue
 		}
 
-		if candidate.vCPU >= existing.vCPU {
+		if candidate.vCPU >= AustinCPU {
 			logger.Println("CPU compatible, continuing evaluation")
 		} else {
 			logger.Println("Insuficient CPU cores, skipping", candidate.instanceType)
